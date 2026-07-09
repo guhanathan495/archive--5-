@@ -16,9 +16,10 @@ with tab1:
     st.subheader("AI Medical Symptom Risk Assessment")
     
     symptoms_list = [
-        'abnormal_menstruation', 'acidity', 'altered_sensorium', 'anxiety', 
-        'chest_pain', 'chills', 'continuous_sneezing', 'cough', 
-        'shivering', 'stomach_pain', 'vomiting', 'yellow_urine'
+        'abdominal_pain', 'abnormal_menstruation', 'acidity', 'acute_liver_failure',
+        'altered_sensorium', 'anxiety', 'chest_pain', 'chills', 
+        'continuous_sneezing', 'cough', 'shivering', 'stomach_pain', 
+        'vomiting', 'yellow_urine'
     ]
 
     s1 = st.selectbox("Primary Symptom", ["none"] + symptoms_list, key="s1")
@@ -28,20 +29,22 @@ with tab1:
     if st.button("Analyze Symptoms", type="primary"):
         selected_symptoms = [s for s in [s1, s2, s3] if s != "none"]
         
-        predicted_disease = "Common Cold"
+        predicted_disease = "General Health Risk / Under Evaluation"
         
-        if 'altered_sensorium' in selected_symptoms or 'yellow_urine' in selected_symptoms:
-            predicted_disease = "Jaundice / Chronic Cholestasis"
-        elif 'stomach_pain' in selected_symptoms or 'acidity' in selected_symptoms:
-            predicted_disease = "GERD / Hyperacidity"
+        if 'acute_liver_failure' in selected_symptoms or 'yellow_urine' in selected_symptoms or 'altered_sensorium' in selected_symptoms:
+            predicted_disease = "Severe Hepatic Dysfunction / Jaundice Risk"
+        elif 'abdominal_pain' in selected_symptoms or 'stomach_pain' in selected_symptoms or 'acidity' in selected_symptoms:
+            predicted_disease = "Gastrointestinal Issue / GERD"
         elif 'continuous_sneezing' in selected_symptoms or 'shivering' in selected_symptoms or 'chills' in selected_symptoms:
-            predicted_disease = "Common Cold / Allergy"
+            predicted_disease = "Common Cold / Upper Respiratory Infection"
         elif 'chest_pain' in selected_symptoms or 'cough' in selected_symptoms:
-            predicted_disease = "Bronchial Asthma / Lung Issue"
+            predicted_disease = "Cardio-Respiratory Evaluation Required"
         elif 'abnormal_menstruation' in selected_symptoms or 'anxiety' in selected_symptoms:
-            predicted_disease = "Hormonal Imbalance Risk"
+            predicted_disease = "Neuro-Endocrine / Hormonal Imbalance Risk"
             
         st.success(f"### Predicted Condition: **{predicted_disease}**")
+
+
 
 # ==========================================         
 # TAB 2: HEART DISEASE PREDICTOR
