@@ -123,7 +123,7 @@ with tab4:
             base_diabetes = [d_age, 0.0, d_bmi, d_bp] + [0.0]*5 + [d_glu]
             pred_d = model_d.predict(np.array([base_diabetes]))
             
-            # இண்டெக்ஸ் பக் [0] என்று துல்லியமாகச் சரிசெய்யப்பட்டுவிட்டது
+           
             if pred_d[0] == 1:
                 st.error("### Result: High Risk of Diabetes / Metabolic Dysfunction Detected")
             else:
