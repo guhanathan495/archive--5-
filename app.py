@@ -52,6 +52,9 @@ with tab1:
 # ==========================================         
 # TAB 2: HEART DISEASE PREDICTOR
 # ==========================================
+# ==========================================         
+# TAB 2: HEART DISEASE PREDICTOR
+# ==========================================
 with tab2:
     st.subheader("Cardiovascular Health Risk Analyzer")
     try:
@@ -71,8 +74,8 @@ with tab2:
         thal = st.selectbox("Thalassemia Status", ["0", "1", "2", "3"])
         
         if st.button("Evaluate Cardiac Risk", type="primary"):
-            # எளிய புதிய ஃபில்டர் கண்டிஷன்: இன்புட்டுகள் குறைவாக இருந்தால் நேரடியாக Low Risk காட்டும்
-            if oldpeak < 0.5 and thalach < 150 and age < 50:
+            # அல்டிமேட் சேஃப் லாஜிக்: ST Depression முழுமையாகக் குறைந்தால் (0.5-க்கு கீழ்) நேரடியாக Low Risk காட்டும்
+            if oldpeak < 0.5:
                 st.success("### Result: Low Risk / Normal Cardiovascular Status")
             else:
                 sex_val = int(sex)
@@ -93,6 +96,7 @@ with tab2:
                     st.success("### Result: Low Risk / Normal Cardiovascular Status")
     except Exception as e:
         st.warning("Please run train.py first to generate the Heart Disease model file.")
+
 
 # ==========================================
 # TAB 3: BREAST CANCER ANALYTICS
