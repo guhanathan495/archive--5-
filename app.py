@@ -119,12 +119,11 @@ with tab4:
         if st.button("Evaluate Diabetes Risk", type="primary"):
             base_diabetes = [d_age, 0.0, d_bmi, d_bp] + [0.0]*5 + [d_glu]
             pred_d = model_d.predict(np.array([base_diabetes]))
+            
+            # இங்க்தான் திருத்தம் செய்யப்பட்டுள்ளது: pred_d[0] என மாற்றப்பட்டுள்ளது
             if pred_d[0] == 1:
                 st.error("### Result: High Risk of Diabetes / Metabolic Dysfunction Detected")
             else:
                 st.success("### Result: Low Risk / Normal Metabolic Profile")
     except Exception as e:
         st.warning("Please run train.py first to generate the Diabetes model file.")
-
-st.markdown("---")
-st.info("💡 *Disclaimer: Built for job fair verification. Consult professionals for healthcare decisions.*")
