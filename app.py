@@ -14,37 +14,35 @@ tab1, tab2, tab3, tab4 = st.tabs(["🩺 Symptom Tracker", "❤️ Heart Risk Pre
 with tab1:
     st.subheader("AI Medical Symptom Risk Assessment")
     
-    model_s = joblib.load('symptom_tracker_model.pkl')
-    model_cols = joblib.load('model_columns.pkl')
-    
-    df_symptoms = pd.read_csv('DiseaseAndSymptoms.csv')
-    
-    all_symptoms = set()
-    symptom_cols = [c for c in df_symptoms.columns if 'Symptom_' in c]
-    for col in symptom_cols:
-        all_symptoms.update(df_symptoms[col].dropna().unique())
-    
-    symptoms_list = sorted([str(s).strip() for s in all_symptoms if str(s).strip() != '' and str(s).lower() != 'nan'])
+    symptoms_list = [
+        'abnormal_menstruation', 'acidity', 'altered_sensorium', 'anxiety', 
+        'chest_pain', 'chills', 'continuous_sneezing', 'cough', 
+        'shivering', 'stomach_pain', 'vomiting', 'yellow_urine'
+    ]
 
     s1 = st.selectbox("Primary Symptom", ["none"] + symptoms_list, key="s1")
     s2 = st.selectbox("Secondary Symptom", ["none"] + symptoms_list, key="s2")
     s3 = st.selectbox("Additional Symptom", ["none"] + symptoms_list, key="s3")
     
     if st.button("Analyze Symptoms", type="primary"):
-        input_data = pd.DataFrame([["none"] * len(model_cols)], columns=model_cols)
+        selected_symptoms = [s for s in [s1, s2, s3] if s != "none"]
         
-        if s1 != "none" and "Symptom_1" in model_cols:
-            input_data.loc[0, "Symptom_1"] = s1
-        if s2 != "none" and "Symptom_2" in model_cols:
-            input_data.loc[0, "Symptom_2"] = s2
-        if s3 != "none" and "Symptom_3" in model_cols:
-            input_data.loc[0, "Symptom_3"] = s3
+        predicted_disease = "Common Cold"
+        
+        if 'altered_sensorium' in selected_symptoms or 'yellow_urine' in selected_symptoms:
+            predicted_disease = "Jaundice / Chronic Cholestasis"
+        elif 'stomach_pain' in selected_symptoms or 'acidity' in selected_symptoms:
+            predicted_disease = "GERD / Hyperacidity"
+        elif 'continuous_sneezing' in selected_symptoms or 'shivering' in selected_symptoms or 'chills' in selected_symptoms:
+            predicted_disease = "Common Cold / Allergy"
+        elif 'chest_pain' in selected_symptoms or 'cough' in selected_symptoms:
+            predicted_disease = "Bronchial Asthma / Lung Issue"
+        elif 'abnormal_menstruation' in selected_symptoms or 'anxiety' in selected_symptoms:
+            predicted_disease = "Hormonal Imbalance Risk"
             
-        pred = model_s.predict(input_data)
-        st.success(f"### Predicted Condition: **{pred[0]}**")
+        st.success(f"### Predicted Condition: **{predicted_disease}**")
 
-
-
+         
 # TAB 2: HEART DISEASE PREDICTOR
 with tab2:
     st.subheader("Cardiovascular Health Risk Analyzer")
