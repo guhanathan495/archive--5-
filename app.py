@@ -108,14 +108,18 @@ with tab3:
         m_smoothness = st.slider("Mean Smoothness", 0.05, 0.25, 0.1, step=0.01)
         
         if st.button("Execute Diagnostic Test", type="primary"):
-            base_features = [m_radius, m_texture, m_perimeter, m_area, m_smoothness] + [0.1]*25
-            pred_c = model_c.predict(np.array([base_features]))
-            if pred_c[0] == 0: 
+            if m_radius > 20.0 and m_area > 1500.0:
                 st.error("### Pathology Status: Malignant Tumor (High Risk Cancer)")
-            else: 
-                st.success("### Pathology Status: Benign Tumor (Safe)")
+            else:
+                base_features = [m_radius, m_texture, m_perimeter, m_area, m_smoothness] + [0.1]*25
+                pred_c = model_c.predict(np.array([base_features]))
+                if pred_c == 0: 
+                    st.error("### Pathology Status: Malignant Tumor (High Risk Cancer)")
+                else: 
+                    st.success("### Pathology Status: Benign Tumor (Safe)")
     except Exception as e:
         st.warning("Please run train.py first to generate the Breast Cancer model file.")
+
 
 # ==========================================
 # TAB 4: DIABETES RISK PREDICTOR
