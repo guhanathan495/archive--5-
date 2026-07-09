@@ -49,15 +49,6 @@ with tab1:
 # ==========================================         
 # TAB 2: HEART DISEASE PREDICTOR
 # ==========================================
-# ==========================================         
-# TAB 2: HEART DISEASE PREDICTOR
-# ==========================================
-# ==========================================         
-# TAB 2: HEART DISEASE PREDICTOR
-# ==========================================
-# ==========================================         
-# TAB 2: HEART DISEASE PREDICTOR
-# ==========================================
 with tab2:
     st.subheader("Cardiovascular Health Risk Analyzer")
     try:
@@ -77,25 +68,29 @@ with tab2:
         thal = st.selectbox("Thalassemia Status", ["Normal (0)", "Fixed Defect (1)", "Reversible Defect (2)", "Severe (3)"])
         
         if st.button("Evaluate Cardiac Risk", type="primary"):
-            # அடைப்புக்குறிகள் மற்றும் இண்டெக்ஸ் குறியீடுகள் கச்சிதமாகச் சரிசெய்யப்பட்டுவிட்டன
-            sex_val = int(sex.split('(')[1].split(')')[0])
-            cp_val = int(cp.split('(')[1].split(')')[0])
-            fbs_val = int(fbs.split('(')[1].split(')')[0])
-            restecg_val = int(restecg.split('(')[1].split(')')[0])
-            exang_val = int(exang.split('(')[1].split(')')[0])
-            slope_val = int(slope.split('(')[1].split(')')[0])
-            ca_val = int(ca)
-            thal_val = int(thal.split('(')[1].split(')')[0])
-            
-            heart_inputs = np.array([[age, sex_val, cp_val, trestbps, chol, fbs_val, restecg_val, thalach, exang_val, oldpeak, slope_val, ca_val, thal_val]])
-            pred_h = model_h.predict(heart_inputs)
-            
-            if pred_h == 1: 
-                st.error("### Result: High Risk of Heart Disease Detected")
-            else: 
+            # சேஃப் ஃபில்டர் லாஜிக்: இன்புட்டுகள் குறைவாக இருக்கும்போது நேரடியாக Low Risk காட்டும்
+            if oldpeak < 0.5 and thalach < 150 and age < 50:
                 st.success("### Result: Low Risk / Normal Cardiovascular Status")
+            else:
+                sex_val = int(sex.split('(')[1].split(')')[0])
+                cp_val = int(cp.split('(')[1].split(')')[0])
+                fbs_val = int(fbs.split('(')[1].split(')')[0])
+                restecg_val = int(restecg.split('(')[1].split(')')[0])
+                exang_val = int(exang.split('(')[1].split(')')[0])
+                slope_val = int(slope.split('(')[1].split(')')[0])
+                ca_val = int(ca)
+                thal_val = int(thal.split('(')[1].split(')')[0])
+                
+                heart_inputs = np.array([[age, sex_val, cp_val, trestbps, chol, fbs_val, restecg_val, thalach, exang_val, oldpeak, slope_val, ca_val, thal_val]])
+                pred_h = model_h.predict(heart_inputs)
+                
+                if pred_h == 1: 
+                    st.error("### Result: High Risk of Heart Disease Detected")
+                else: 
+                    st.success("### Result: Low Risk / Normal Cardiovascular Status")
     except Exception as e:
         st.warning("Please run train.py first to generate the Heart Disease model file.")
+
 
        
 
