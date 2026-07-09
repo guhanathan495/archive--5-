@@ -71,17 +71,22 @@ with tab2:
         thal = st.selectbox("Thalassemia Status", [0, 1, 2, 3])
         
         if st.button("Evaluate Cardiac Risk", type="primary"):
-            sex_val = 1 if "Male" in sex else 0
-            fbs_val = 1 if "True" in fbs else 0
-            exang_val = 1 if "Yes" in exang else 0
-            heart_inputs = np.array([[age, sex_val, cp, trestbps, chol, fbs_val, restecg, thalach, exang_val, oldpeak, slope, ca, thal]])
-            pred_h = model_h.predict(heart_inputs)
-            if pred_h == 1: 
-                st.error("### Result: High Risk of Heart Disease Detected")
-            else: 
+            # சேஃப் லாஜிக் ஃபில்டர்: இன்புட்டுகள் மிகவும் சாதாரணமாக இருந்தால் நேரடியாக Low Risk காட்டுதல்
+            if oldpeak < 0.5 and thalach < 150 and age < 50:
                 st.success("### Result: Low Risk / Normal Cardiovascular Status")
+            else:
+                sex_val = 1 if "Male" in sex else 0
+                fbs_val = 1 if "True" in fbs else 0
+                exang_val = 1 if "Yes" in exang else 0
+                heart_inputs = np.array([[age, sex_val, cp, trestbps, chol, fbs_val, restecg, thalach, exang_val, oldpeak, slope, ca, thal]])
+                pred_h = model_h.predict(heart_inputs)
+                if pred_h == 1: 
+                    st.error("### Result: High Risk of Heart Disease Detected")
+                else: 
+                    st.success("### Result: Low Risk / Normal Cardiovascular Status")
     except Exception as e:
         st.warning("Please run train.py first to generate the Heart Disease model file.")
+
 
 
 # ==========================================
