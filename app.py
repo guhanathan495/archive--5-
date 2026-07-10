@@ -60,32 +60,32 @@ with tab2:
     try:
         model_h = joblib.load('heart_disease_model.pkl')
         age = st.slider("Age", 1, 100, 45)
-        sex = st.selectbox("Sex", ["0", "1"])
-        cp = st.selectbox("Chest Pain Type", ["0", "1", "2", "3"])
+        sex = st.selectbox("Sex", ["Female", "Male"])
+        cp = st.selectbox("Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal Pain", "Asymptomatic"])
         trestbps = st.slider("Resting Blood Pressure (mm Hg)", 80, 200, 120)
         chol = st.slider("Serum Cholestoral (mg/dl)", 100, 600, 200)
-        fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", ["0", "1"])
-        restecg = st.selectbox("Resting Electrocardiographic Results", ["0", "1", "2"])
+        fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", ["False", "True"])
+        restecg = st.selectbox("Resting Electrocardiographic Results", ["Normal", "ST-T Wave Abnormality", "Left Ventricular Hypertrophy"])
         thalach = st.slider("Maximum Heart Rate Achieved", 60, 220, 150)
-        exang = st.selectbox("Exercise Induced Angina", ["0", "1"])
+        exang = st.selectbox("Exercise Induced Angina", ["No", "Yes"])
         oldpeak = st.slider("ST Depression Induced by Exercise", 0.0, 6.2, 1.0, step=0.1)
-        slope = st.selectbox("Slope of the Peak Exercise ST Segment", ["0", "1", "2"])
+        slope = st.selectbox("Slope of the Peak Exercise ST Segment", ["Upsloping", "Flat", "Downsloping"])
         ca = st.selectbox("Number of Major Vessels", ["0", "1", "2", "3", "4"])
-        thal = st.selectbox("Thalassemia Status", ["0", "1", "2", "3"])
+        thal = st.selectbox("Thalassemia Status", ["Normal", "Fixed Defect", "Reversible Defect", "Severe"])
         
         if st.button("Evaluate Cardiac Risk", type="primary"):
-            # அல்டிமேட் சேஃப் லாஜிக்: ST Depression முழுமையாகக் குறைந்தால் (0.5-க்கு கீழ்) நேரடியாக Low Risk காட்டும்
-            if oldpeak < 0.5:
+            # புதிய எளிய ஃபில்டர்: இன்புட்டுகள் குறைவாக இருந்தால் நேரடியாக Low Risk காட்டும்
+            if oldpeak < 0.5 and thalach < 150 and age < 50:
                 st.success("### Result: Low Risk / Normal Cardiovascular Status")
             else:
-                sex_val = int(sex)
-                cp_val = int(cp)
-                fbs_val = int(fbs)
-                restecg_val = int(restecg)
-                exang_val = int(exang)
-                slope_val = int(slope)
+                sex_val = 1 if sex == "Male" else 0
+                cp_val = ["Typical Angina", "Atypical Angina", "Non-anginal Pain", "Asymptomatic"].index(cp)
+                fbs_val = 1 if fbs == "True" else 0
+                restecg_val = ["Normal", "ST-T Wave Abnormality", "Left Ventricular Hypertrophy"].index(restecg)
+                exang_val = 1 if exang == "Yes" else 0
+                slope_val = ["Upsloping", "Flat", "Downsloping"].index(slope)
                 ca_val = int(ca)
-                thal_val = int(thal)
+                thal_val = ["Normal", "Fixed Defect", "Reversible Defect", "Severe"].index(thal)
                 
                 heart_inputs = np.array([[age, sex_val, cp_val, trestbps, chol, fbs_val, restecg_val, thalach, exang_val, oldpeak, slope_val, ca_val, thal_val]])
                 pred_h = model_h.predict(heart_inputs)
