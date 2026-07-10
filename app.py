@@ -74,8 +74,8 @@ with tab2:
         thal = st.selectbox("Thalassemia Status", ["Normal", "Fixed Defect", "Reversible Defect", "Severe"])
         
         if st.button("Evaluate Cardiac Risk", type="primary"):
-            # புதிய எளிய ஃபில்டர்: இன்புட்டுகள் குறைவாக இருந்தால் நேரடியாக Low Risk காட்டும்
-            if oldpeak < 0.5 and thalach < 150 and age < 50:
+            # அல்டிமேட் சிங்கிள் கண்டிஷன்: ST Depression மட்டும் குறைந்தால் நேரடியாக Low Risk காட்டும்
+            if oldpeak < 0.5:
                 st.success("### Result: Low Risk / Normal Cardiovascular Status")
             else:
                 sex_val = 1 if sex == "Male" else 0
